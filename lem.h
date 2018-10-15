@@ -44,7 +44,7 @@ int 				lem_error(void);
 t_room				*lem_check_4(t_room *pool);
 t_room				*room_parse(char *line, t_room *s);
 t_room				*room_key(char *line, int key, t_room *s);
-t_room				*link_parse(char *line, t_room *s);
+t_room				*link_parse(char **line, t_room *s);
 t_room				*room_maker(char *line, int key, t_room *s);
 t_room				*room_create(char *line, int key, t_room *s);
 int					room_create_legitcoords(char *line, t_room *new);
@@ -58,10 +58,11 @@ t_room				*path_search(t_room *pool);
 t_room				*queue_take(t_room *pool, t_room **queue);
 t_room				**queue_make(t_room *current, t_room *pool, t_room **queue);
 void				path_saver(t_room *pool, t_room *path);
-void				ants_on_paths(t_room *pool);
+void				ants_prepare(t_room *pool);
 void				ants_go(t_room *pool, t_room **arr, int x);
 int 				lem_valid(t_room **pool);
 int 				ants_go_full(t_room *pool, t_room **arr, t_room *tmp2, int x, int y);
+void				lem_free(t_room *s);
 
 
 

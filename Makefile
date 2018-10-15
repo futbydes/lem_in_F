@@ -6,7 +6,7 @@
 #    By: vludan <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/05 15:00:01 by vludan            #+#    #+#              #
-#    Updated: 2018/10/09 17:16:52 by vludan           ###   ########.fr        #
+#    Updated: 2018/10/15 15:07:40 by vludan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ SRC = lem_main.c lem_alg.c get_next_line.c
 OBJ = $(SRC:.c=.o)
 INCLUDES = lem.h
 NAME = lem-in
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -g -Wall -Werror -Wextra
 CC = gcc 
 DIR = libft
 

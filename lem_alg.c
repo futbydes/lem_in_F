@@ -33,25 +33,28 @@ int			lem_alg(t_room *s)
 			path = path->father;
 		}
 	}
-	path = s->next;
-	while (path)
-	{
-		path->key != 0 ? path->father = 0 : 0;
-		path = path->next;
-	}
 	if (err == 0)
 		return (lem_error());
-	ants_on_paths(s->next);
+	ants_prepare(s);
 	return (0);
 }
 
-void			ants_on_paths(t_room *pool)
+void			ants_prepare(t_room *pool)
 {
 	int			x;
 	t_room		*tmp;
+	t_room		*path;
 	t_room		*arr[g_ants + 1];
 
 	x = 0;
+	path = pool; 
+	while (path)
+	{
+		tmp = path->father;
+		if (tmp != 0 && path->key != 0 && tmp->key == 0)
+			path->father = 0;
+		path = path->next;
+	}
 	tmp = pool;
 	while (tmp->key != 1)
 		tmp = tmp->next;
@@ -62,6 +65,7 @@ void			ants_on_paths(t_room *pool)
 	}
 	arr[x] = 0;
 	ants_go(pool, arr, 0);
+
 }
 
 void		ants_go(t_room *pool, t_room **arr, int x)
@@ -74,12 +78,13 @@ void		ants_go(t_room *pool, t_room **arr, int x)
 		y = 0;
 		while (x < g_ants)
 		{
-			if (arr[x] != 0 && arr[x]->links[y] != 0 && arr[x]->father == 0)
+			if (arr[x] != 0 && arr[x]->key != 2 && arr[x]->links[y] != 0 && arr[x]->father == 0)
 			{
 				tmp2 = pool;
+				// choose_link_by_dist
 				while (ft_strcmp(arr[x]->links[y], tmp2->name))
 					tmp2 = tmp2->next;
-				if (tmp2->avail == 3)
+				if (tmp2->avail > 1)
 				{
 					arr[x] = tmp2;
 					printf("L%d-%s ", x + 1, arr[x]->name);
@@ -102,6 +107,34 @@ void		ants_go(t_room *pool, t_room **arr, int x)
 		x = 0;
 	}
 }
+/*
+void		choose_link_by_dist(int	x, t_room *pool)
+{
+	int		min[g_ants + 1];
+	int		y;
+	int		z;
+
+	y = 0;
+	while (arr[x]->links[y] != 0)
+	{
+		tmp2 = pool;
+		while (ft_strcmp(arr[x]->links[y], tmp2->name))
+			tmp2 = tmp2->next;
+		if (tmp->avail == 3)
+			min[y] = tmp2->dist;
+		y++;
+	}
+	y = 0;
+	z = 10000;
+	while (min[y] != 0)
+	{
+		if (min[y] < z)
+			z = min[y];
+		y++;
+	}
+	if (min[y] - z = 3)		
+}
+*/
 
 int			lem_valid(t_room **pool)
 {
@@ -128,13 +161,21 @@ void		path_saver(t_room *pool, t_room *path)
 {
 	t_room	*temp;
 
+	temp = path->father;
+	if ((path->key == 1 || path->key == 2
+		) && (temp->key == 1 || temp->key == 2))
+	{
+		path->avail = 3;
+		temp->avail = 3;
+			return ;
+	}
 	temp = pool;
 	while (temp)
 	{
 		temp->avail < 3 ? temp->avail = 0 : 0;
 		temp = temp->next;
 	}
-	while (path->father)
+	while (path->father && path->dist != 0)
 	{
 		printf("PATH: %s\n", path->name);
 		if (path->key == 1 || path->key == 2)
@@ -201,7 +242,7 @@ t_room		**queue_make(t_room *crnt, t_room *pool, t_room **queue)
 
 	x = 0;
 	y = 0;
-	temp = pool->next;
+	temp = pool;
 	if (queue == 0)
 	{
 		while (temp && ++y)
@@ -213,7 +254,7 @@ t_room		**queue_make(t_room *crnt, t_room *pool, t_room **queue)
 		y++;
 	while (crnt->links && crnt->links[x] != 0)
 	{
-		temp = pool->next;
+		temp = pool;
 		while (temp && ft_strcmp(crnt->links[x], temp->name))
 			temp = temp->next;
 		if (temp && temp->avail == 0)

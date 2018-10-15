@@ -6,7 +6,7 @@
 /*   By: vludan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/09 11:06:11 by vludan            #+#    #+#             */
-/*   Updated: 2018/10/09 11:06:12 by vludan           ###   ########.fr       */
+/*   Updated: 2018/10/15 15:44:06 by vludan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,22 @@ int				g_ants;
 int				main(void)
 {
 	t_room		*s;
+	t_room		*temp;
 
 	s = ft_memalloc(sizeof(t_room));
+		temp = s;
 	s = lem_parse(s);
 	s = lem_check_4(s);
 	if (s == 0)
+	{
+			//lem_free(temp);
+	//	system("leaks lem-in");
 		return (lem_error());
-	printroom(s);
-	lem_alg(s);
-	//system("leaks lem-in");
+	}
+	printroom(s->next);
+	lem_alg(s->next);
+	lem_free(temp->next);
+	system("leaks lem-in");
 	return (0);
 }
 
@@ -56,6 +63,28 @@ t_room			*lem_check_4(t_room *pool)
 		return (pool);
 }
 
+void				lem_free(t_room *s)
+{
+	int 			x;
+	t_room			*temp;
+
+	x = 0;
+	temp = s;
+	while (s != 0)
+	{
+		if (s->name != 0)
+			free(s->name);
+		while (s->links && s->links[x] != 0)
+		{
+			free(s->links[x]);
+			x++;
+		}
+		if (x != 0)
+			free(s->links[x]);
+		s = s->next;
+	}
+}
+
 t_room				*lem_parse(t_room *s)
 {
 	char		*line;
@@ -65,9 +94,9 @@ t_room				*lem_parse(t_room *s)
 	exit = 0;
 	get_next_line(0, &line);
 	g_ants = ft_atoi(line);
+	free(line);
 	if (g_ants < 1)
 		return (0);
-	free(line);
 	res = s;
 	while (res != 0 && get_next_line(0, &line) > 0)
 	{
@@ -76,10 +105,10 @@ t_room				*lem_parse(t_room *s)
 			res = room_parse(line, s);
 		else 
 		{
-			res = link_parse(line, s);
+			res = link_parse(&line, s);
 			exit = 1;
 		}
-		free(line);
+		line != 0 ? free(line) : 0;
 	}
 	return (s);
 }
@@ -101,27 +130,28 @@ t_room			*room_key(char *line, int key, t_room *s)
 {
 	free(line);
 	get_next_line(0, &line);
-	if (!ft_strncmp("#", line, 1))
+	if (*line == 0 || !room_create_valid_pattern(line) ||
+		!ft_strncmp("#", line, 1))
 		return (0);
 	else
 		return (room_maker(line, key, s));
 }
 
-t_room			*link_parse(char *line, t_room *s)
+t_room			*link_parse(char **line, t_room *s)
 {
 	t_room		*x;
 
-	if (!ft_strcmp("##start", line) || !ft_strcmp("##end", line))
+	if (!ft_strcmp("##start", *line) || !ft_strcmp("##end", *line))
 		return (0);
-	else if (!ft_strncmp(line, "#", 1))
+	else if (!ft_strncmp(*line, "#", 1))
 		return (s);
-	else if (ft_strchr(line, '-'))
+	else if (ft_strchr(*line, '-'))
 	{
-		x = room_link(line, s);
+		x = room_link(*line, s);
 		if (x != 0)
 		{
-			line = room_link_invert(line);
-			x = room_link(line, s);
+			*line = room_link_invert(*line);
+			x = room_link(*line, s);
 		}
 		if (x != 0)
 			return (s);
@@ -136,11 +166,12 @@ char			*room_link_invert(char *line)
 {
 	char		*new;
 
+
 	new = ft_memalloc(ft_strlen(line) + 1);
 	ft_strcpy(new, line + ft_strnlen(line, '-') + 1);
 	ft_memmove(new + ft_strlen(new), "-", 1);
 	ft_memmove(new + ft_strlen(new), line, ft_strnlen(line, '-'));
-	//free(line);
+	free(line);
 	return (new);
 }
 
@@ -289,6 +320,8 @@ int				room_create_valid_pattern(char *line)
 
 	temp = ft_strchr(line, ' ');
 	s = 0;
+	if (temp == 0)
+		return (0);
 	while (*temp != '\0')
 	{
 		temp += 1;
