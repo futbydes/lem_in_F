@@ -60,11 +60,16 @@ t_room				*queue_take(t_room *pool, t_room **queue);
 t_room				**queue_make(t_room *current, t_room *pool, t_room **queue);
 void				path_saver(t_room *pool, t_room *path);
 void				ants_prepare(t_room *pool);
-void				ants_go(t_room *pool, t_room **arr, int x);
+void				ants_go(t_room *pool, t_room **arr);
 int 				lem_valid(t_room **pool);
 int 				ants_go_full(t_room *pool, t_room **arr, t_room *tmp2, int x, int y);
 void				lem_free(t_room *s);
-int 		room_cmp(char *s1, char *s2, char c);
+int 				room_cmp(char *s1, char *s2, char c);
+t_room				**queue_make_cycle(t_room *crnt, t_room *pool,
+		t_room **queue, int x);
+
+void		ants_go_step(int x, int y, t_room **arr, t_room *pool);
+
 
 
 

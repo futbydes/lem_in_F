@@ -95,16 +95,14 @@ t_room				*lem_parse(t_room *s)
 	get_next_line(0, &line);
 	g_ants = ft_atoi(line);
 	free(line);
-	if (g_ants < 1)
+	if (g_ants < 1 || g_ants > 1000000)
 		return (0);
 	res = s;
 	while (res != 0 && get_next_line(0, &line) > 0)
 	{
 		s = res;
 		if ((ft_strchr(line, ' ') || !ft_strncmp("#", line, 1)) && !exit)
-		{
 			res = room_parse(line, s);
-		}
 		else 
 		{
 			res = link_parse(&line, s);

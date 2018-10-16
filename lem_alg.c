@@ -14,6 +14,8 @@
 
 //CORDS VALIDATION FOR THE SAME ?
 //10million ants segfault
+//CORDS START FROM 0
+
 extern int g_ants;
 
 int			lem_alg(t_room *s)
@@ -64,50 +66,64 @@ void			ants_prepare(t_room *pool)
 		x++;
 	}
 	arr[x] = 0;
-	ants_go(pool, arr, 0);
+	ants_go(pool, arr);
 
 }
 
-void		ants_go(t_room *pool, t_room **arr, int x)
+void		ants_go(t_room *pool, t_room **arr)
 {
-	int		y;
-	t_room	*tmp2;
-
 	while (lem_valid(arr))
 	{
-		y = 0;
-		while (x < g_ants)
-		{
-			if (arr[x] != 0 && arr[x]->key != 2 && arr[x]->links[y] != 0 && arr[x]->father == 0)
-			{
-			//	arr[x] = choose_link_by_dist(x, y, t_room *pool)
-			
-				tmp2 = pool;
-				// choose_link_by_dist
-				while (ft_strcmp(arr[x]->links[y], tmp2->name))
-					tmp2 = tmp2->next;
-				if (tmp2->avail > 1)
-				{
-					arr[x] = tmp2;
-					printf("L%d-%s ", x + 1, arr[x]->name);
-					x++;
-				}
-				y++;
-			}
-			else if (arr[x] != 0 && arr[x]->father != 0)
-			{
-				arr[x] = arr[x]->father;
-				printf("L%d-%s ", x + 1, arr[x]->name);
-				if (arr[x]->key == 2)
-					arr[x] = 0;
-				x++;
-			}
-			else
-				x++;
-		}
+		ants_go_step(0, 0, arr, pool);
 		printf("\n");
-		x = 0;
 	}
+}
+
+void		ants_go_step(int x, int y, t_room **arr, t_room *pool)
+{
+	t_room	*tmp2;
+
+	while (x < g_ants)
+	{
+		if (arr[x] != 0 && arr[x]->key != 2 && arr[x]->links[y] != 0
+			&& arr[x]->father == 0)
+		{
+			tmp2 = pool;
+			while (ft_strcmp(arr[x]->links[y], tmp2->name))
+				tmp2 = tmp2->next;
+			if (tmp2->avail > 1)
+			{
+				arr[x] = tmp2;
+				printf("L%d-%s ", x + 1, arr[x]->name);
+				x++;
+			}
+			y++;
+		}
+		else if (arr[x] != 0 && arr[x]->father != 0)
+		{
+			arr[x] = arr[x]->father;
+			printf("L%d-%s ", x + 1, arr[x]->name);
+			if (arr[x]->key == 2)
+				arr[x] = 0;
+			x++;
+		}
+		else
+			x++;
+	}
+}
+
+void		ants_go_step_dstcmp()
+{
+	tmp2 = pool;
+	while (ft_strcmp(arr[x]->links[y], tmp2->name))
+		tmp2 = tmp2->next;
+	if (tmp2->avail > 1)
+	{
+		arr[x] = tmp2;
+		printf("L%d-%s ", x + 1, arr[x]->name);
+		x++;
+	}
+	return (x);
 }
 
 int			lem_valid(t_room **pool)
@@ -223,6 +239,15 @@ t_room		**queue_make(t_room *crnt, t_room *pool, t_room **queue)
 			temp = temp->next;
 		queue = ft_memalloc(y + 1 * 8);
 	}
+	return (queue_make_cycle(crnt, pool, queue, x));
+}
+
+t_room		**queue_make_cycle(t_room *crnt, t_room *pool, t_room **queue,
+	int x)
+{
+	int		y;
+	t_room	*temp;
+
 	y = 0;
 	while (queue[y] != 0)
 		y++;
