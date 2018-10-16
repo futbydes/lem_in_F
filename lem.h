@@ -47,6 +47,7 @@ t_room				*room_key(char *line, int key, t_room *s);
 t_room				*link_parse(char **line, t_room *s);
 t_room				*room_maker(char *line, int key, t_room *s);
 t_room				*room_create(char *line, int key, t_room *s);
+int					room_name_cmp(char *line, char *line2, char c);
 int					room_create_legitcoords(char *line, t_room *new);
 int					room_create_valid_pattern(char *line);
 t_room				*room_link(char *line, t_room *s);
@@ -63,6 +64,10 @@ void				ants_go(t_room *pool, t_room **arr, int x);
 int 				lem_valid(t_room **pool);
 int 				ants_go_full(t_room *pool, t_room **arr, t_room *tmp2, int x, int y);
 void				lem_free(t_room *s);
+int 		room_cmp(char *s1, char *s2, char c);
+
+
+
 
 
 

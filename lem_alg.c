@@ -80,6 +80,8 @@ void		ants_go(t_room *pool, t_room **arr, int x)
 		{
 			if (arr[x] != 0 && arr[x]->key != 2 && arr[x]->links[y] != 0 && arr[x]->father == 0)
 			{
+			//	arr[x] = choose_link_by_dist(x, y, t_room *pool)
+			
 				tmp2 = pool;
 				// choose_link_by_dist
 				while (ft_strcmp(arr[x]->links[y], tmp2->name))
@@ -107,34 +109,6 @@ void		ants_go(t_room *pool, t_room **arr, int x)
 		x = 0;
 	}
 }
-/*
-void		choose_link_by_dist(int	x, t_room *pool)
-{
-	int		min[g_ants + 1];
-	int		y;
-	int		z;
-
-	y = 0;
-	while (arr[x]->links[y] != 0)
-	{
-		tmp2 = pool;
-		while (ft_strcmp(arr[x]->links[y], tmp2->name))
-			tmp2 = tmp2->next;
-		if (tmp->avail == 3)
-			min[y] = tmp2->dist;
-		y++;
-	}
-	y = 0;
-	z = 10000;
-	while (min[y] != 0)
-	{
-		if (min[y] < z)
-			z = min[y];
-		y++;
-	}
-	if (min[y] - z = 3)		
-}
-*/
 
 int			lem_valid(t_room **pool)
 {

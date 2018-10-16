@@ -31,8 +31,8 @@ int				main(void)
 	}
 	printroom(s->next);
 	lem_alg(s->next);
-	lem_free(temp->next);
-	system("leaks lem-in");
+//	lem_free(temp->next);
+//	system("leaks lem-in");
 	return (0);
 }
 
@@ -102,13 +102,15 @@ t_room				*lem_parse(t_room *s)
 	{
 		s = res;
 		if ((ft_strchr(line, ' ') || !ft_strncmp("#", line, 1)) && !exit)
+		{
 			res = room_parse(line, s);
+		}
 		else 
 		{
 			res = link_parse(&line, s);
 			exit = 1;
 		}
-		line != 0 ? free(line) : 0;
+	//	line != 0 ? free(line) : 0;
 	}
 	return (s);
 }
@@ -171,7 +173,7 @@ char			*room_link_invert(char *line)
 	ft_strcpy(new, line + ft_strnlen(line, '-') + 1);
 	ft_memmove(new + ft_strlen(new), "-", 1);
 	ft_memmove(new + ft_strlen(new), line, ft_strnlen(line, '-'));
-	free(line);
+//	free(line);
 	return (new);
 }
 
@@ -189,7 +191,7 @@ t_room			*room_link(char *line, t_room *s)
 	while (temp != 0 && s != 0)
 	{
 		s = s->next;
-		temp = ft_strncmp(line, s->name, ft_strnlen(line, '-'));
+		temp = room_cmp(s->name, line, '-');
 		x++;
 	}
 	if (!temp)
@@ -200,6 +202,19 @@ t_room			*room_link(char *line, t_room *s)
 	}
 	else
 		return (0);
+}
+
+int 		room_cmp(char *s, char *s2, char c)
+{
+	int 	x;
+
+	x = 0;
+	while (s[x] == s2[x] && s[x] != 0 && s2[x] != 0)
+		x++;
+	if (s2[x] == c && s[x] == '\0')
+		return (0);
+	else
+		return (1);
 }
 
 int				room_link_validation(char *line, t_room *s)
@@ -257,7 +272,9 @@ t_room			*room_maker(char *line, int key, t_room *s)
 	if (!ft_strncmp("L", line, 1) || !ft_strcmp("##start", line) ||
 		!ft_strcmp("##end", line) ||
 		ft_memchr(line, '-', ft_strnlen(line, ' ')))
+	{
 		return (0);
+	}
 	else if (!ft_strncmp("#", line, 1))
 		return (s);
 	else
@@ -276,7 +293,7 @@ t_room			*room_create(char *line, int key, t_room *s)
 	while (s->next != 0)
 	{
 		s = s->next;
-		if (!ft_strncmp(s->name, line, ft_strnlen(line, ' ')))
+		if (!room_cmp(s->name, line, ' '))
 			return (0);
 	}
 	new = ft_memalloc(sizeof(t_room));
@@ -335,7 +352,7 @@ int				room_create_valid_pattern(char *line)
 		}
 		if (*temp == ' ')
 			s++;
-		if (s > 1)
+		if (s > 1 || s == 0)
 			return (0);
 	}
 	return (1);

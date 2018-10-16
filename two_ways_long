@@ -1,4 +1,4 @@
-3
+5
 ##start
 rs 1 0
 ##end
@@ -20,3 +20,5 @@ rs-s1
 rs-s3
 s6-re
 s2-re
+s1-re
+rs-re
