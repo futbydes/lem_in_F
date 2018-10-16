@@ -29,8 +29,9 @@ int				main(void)
 	}
 	printroom(s->next);
 	lem_alg(s->next);
-//	lem_free(temp->next);
-//	system("leaks lem-in");
+	lem_free(s->next);
+	free(s);
+	//system("cppcheck lem-in");
 	return (0);
 }
 
@@ -64,10 +65,13 @@ t_room			*lem_check_4(t_room *pool)
 void				lem_free(t_room *s)
 {
 	int 			x;
+	t_room			*temp;
 
-	x = 0;
+
 	while (s != 0)
 	{
+		x = 0;
+		temp = s;
 		if (s->name != 0)
 			free(s->name);
 		while (s->links && s->links[x] != 0)
@@ -75,9 +79,9 @@ void				lem_free(t_room *s)
 			free(s->links[x]);
 			x++;
 		}
-		if (x != 0)
-			free(s->links[x]);
+		free(s->links);
 		s = s->next;
+		free(temp);
 	}
 }
 
@@ -104,7 +108,7 @@ t_room				*lem_parse(t_room *s)
 			res = link_parse(&line, s);
 			exit = 1;
 		}
-	//	line != 0 ? free(line) : 0;
+		line != 0 ? free(line) : 0;
 	}
 	return (s);
 }
@@ -128,7 +132,10 @@ t_room			*room_key(char *line, int key, t_room *s)
 	get_next_line(0, &line);
 	if (*line == 0 || !room_create_valid_pattern(line) ||
 		!ft_strncmp("#", line, 1))
+	{
+		free(line);
 		return (0);
+	}
 	else
 		return (room_maker(line, key, s));
 }
@@ -167,7 +174,7 @@ char			*room_link_invert(char *line)
 	ft_strcpy(new, line + ft_strnlen(line, '-') + 1);
 	ft_memmove(new + ft_strlen(new), "-", 1);
 	ft_memmove(new + ft_strlen(new), line, ft_strnlen(line, '-'));
-//	free(line);
+	free(line);
 	return (new);
 }
 
@@ -252,9 +259,8 @@ t_room			*room_link_add(char *line, t_room *s, int c)
 			x++;
 	if (s->links[x] != 0 || !ft_strcmp(ft_strchr(line, '-') + 1, s->name))
 		return (temp);
-	s->links[x] = ft_memalloc(ft_strnlen((line +
-		ft_strnlen(line, '-') + 1) + 1, ' '));
-	s->links[x] = ft_strcpy(s->links[x], (line + ft_strnlen(line, '-') + 1));
+	s->links[x] = ft_memalloc(ft_strnlen((line + ft_strnlen(line, '-') + 1) + 1, ' '));
+	ft_strcpy(s->links[x], (line + ft_strnlen(line, '-') + 1));
 	s->links[x + 1] = 0;
 	return (temp);
 }
@@ -267,13 +273,18 @@ t_room			*room_maker(char *line, int key, t_room *s)
 		!ft_strcmp("##end", line) ||
 		ft_memchr(line, '-', ft_strnlen(line, ' ')))
 	{
+		free(line);
 		return (0);
 	}
 	else if (!ft_strncmp("#", line, 1))
+	{
+		free(line);
 		return (s);
+	}
 	else
 	{
 		s = room_create(line, key, s);
+		free(line);
 		return (s);
 	}
 }

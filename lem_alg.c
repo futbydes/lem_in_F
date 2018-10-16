@@ -235,7 +235,7 @@ t_room		**queue_make(t_room *crnt, t_room *pool, t_room **queue)
 	{
 		while (temp && ++y)
 			temp = temp->next;
-		queue = ft_memalloc(y + 1 * 8);
+		queue = ft_memalloc((y + 1) * 8);
 	}
 	return (queue_make_cycle(crnt, pool, queue, x));
 }
