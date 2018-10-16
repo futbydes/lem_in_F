@@ -38,7 +38,7 @@ size_t			ft_strlcat(char *dst, const char *src, size_t size)
 		x++;
 	if (size == 0)
 		return (n + c);
-	while ((x != (n + c)) && (x < size - 1) && (src != '\0'))
+	while ((x != (n + c)) && (x < size - 1) && (src != 0))
 		dst[x++] = *src++;
 	dst[x] = '\0';
 	return (n + c);

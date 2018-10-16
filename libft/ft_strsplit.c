@@ -69,7 +69,7 @@ static char		**stringalloc(const char **s, int z, char c, char **arr)
 			return (0);
 		}
 	}
-	if (*s != '\0')
+	if (*s != 0)
 		while ((**s != c) && (**s != '\0'))
 			arr[z][y++] = *(*s)++;
 	arr[z][y] = '\0';

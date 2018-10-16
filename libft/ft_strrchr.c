@@ -13,10 +13,8 @@
 char	*ft_strrchr(const char *s, int c)
 {
 	char	*x;
-	int		y;
 
 	x = 0;
-	y = 0;
 	while (*s != '\0')
 	{
 		if (*s == (char)c)

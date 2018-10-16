@@ -111,7 +111,7 @@ void		ants_go_step(int x, int y, t_room **arr, t_room *pool)
 			x++;
 	}
 }
-
+/*
 void		ants_go_step_dstcmp()
 {
 	tmp2 = pool;
@@ -124,7 +124,7 @@ void		ants_go_step_dstcmp()
 		x++;
 	}
 	return (x);
-}
+} */
 
 int			lem_valid(t_room **pool)
 {
@@ -180,7 +180,6 @@ t_room		*path_search(t_room *pool)
 {
 	t_room	**queue;
 	t_room	*crnt;
-	int		x;
 
 	crnt = pool;
 	queue = 0;
@@ -192,7 +191,6 @@ t_room		*path_search(t_room *pool)
 		crnt->avail = 2;
 		crnt = queue_take(pool, queue);
 	}
-	x = 0;
 	free(queue);
 	if (crnt && crnt->key == 1)
 		return (crnt);

@@ -17,10 +17,8 @@ int				g_ants;
 int				main(void)
 {
 	t_room		*s;
-	t_room		*temp;
 
 	s = ft_memalloc(sizeof(t_room));
-		temp = s;
 	s = lem_parse(s);
 	s = lem_check_4(s);
 	if (s == 0)
@@ -66,10 +64,8 @@ t_room			*lem_check_4(t_room *pool)
 void				lem_free(t_room *s)
 {
 	int 			x;
-	t_room			*temp;
 
 	x = 0;
-	temp = s;
 	while (s != 0)
 	{
 		if (s->name != 0)
