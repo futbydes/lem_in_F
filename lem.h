@@ -19,20 +19,32 @@
 
 typedef struct 		s_lst
 {
-	int				ds;
 	char			*buff;
+	int				ds;
 	struct s_lst	*next;
 }					t_lst;
+
+typedef struct 		g_var
+{
+	char 			colors;
+	char			rlc;
+	char 			paths;
+	char			map;
+	char			leaks;
+	int 			x;
+	int 			ants;
+	char			**lines;
+}					t_var;
 
 typedef struct		s_room
 {
 	char			*name;
 	int				key;
 	int				avail;
-	void			*father;
 	int				x;
 	int				y;
 	int 			dist;
+	void			*father;
 	struct s_room	*next;
 	char			**links;
 }					t_room;
@@ -43,7 +55,7 @@ t_room				*lem_parse(t_room *s);
 int 				lem_error(void);
 t_room				*lem_check_4(t_room *pool);
 t_room				*room_parse(char *line, t_room *s);
-t_room				*room_key(char *line, int key, t_room *s);
+t_room				*room_key(int key, t_room *s);
 t_room				*link_parse(char **line, t_room *s);
 t_room				*room_maker(char *line, int key, t_room *s);
 t_room				*room_create(char *line, int key, t_room *s);
@@ -53,7 +65,7 @@ int					room_create_valid_pattern(char *line);
 t_room				*room_link(char *line, t_room *s);
 int					room_link_validation(char *line, t_room *s);
 t_room				*room_link_add(char *line, t_room *s, int c);
-char				*room_link_invert(char *line);
+char				*room_link_nv(char *line);
 int					lem_alg(t_room *s);
 t_room				*path_search(t_room *pool);
 t_room				*queue_take(t_room *pool, t_room **queue);
@@ -69,6 +81,8 @@ t_room				**queue_make_cycle(t_room *crnt, t_room *pool,
 		t_room **queue, int x);
 
 void		ants_go_step(int x, int y, t_room **arr, t_room *pool);
+void			lem_map_arr(char *line);
+
 
 
 
@@ -78,5 +92,7 @@ void		ants_go_step(int x, int y, t_room **arr, t_room *pool);
 
 
 void				printroom(t_room *s);
+void				printmap(void);
+
 
 #endif

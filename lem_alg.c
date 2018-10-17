@@ -13,10 +13,9 @@
 #include "lem.h"
 
 //CORDS VALIDATION FOR THE SAME ?
-//10million ants segfault
 //CORDS START FROM 0
 
-extern int g_ants;
+extern t_var *vars;
 
 int			lem_alg(t_room *s)
 {
@@ -37,6 +36,8 @@ int			lem_alg(t_room *s)
 	}
 	if (err == 0)
 		return (lem_error());
+	vars->map != 0 ? 0 : printmap();
+	vars->rlc != 0 ? printroom(s) : 0;
 	ants_prepare(s);
 	return (0);
 }
@@ -46,7 +47,7 @@ void			ants_prepare(t_room *pool)
 	int			x;
 	t_room		*tmp;
 	t_room		*path;
-	t_room		*arr[g_ants + 1];
+	t_room		*arr[vars->ants + 1];
 
 	x = 0;
 	path = pool; 
@@ -60,7 +61,7 @@ void			ants_prepare(t_room *pool)
 	tmp = pool;
 	while (tmp->key != 1)
 		tmp = tmp->next;
-	while (x != g_ants + 1)
+	while (x != vars->ants + 1)
 	{
 		arr[x] = tmp;
 		x++;
@@ -83,7 +84,7 @@ void		ants_go_step(int x, int y, t_room **arr, t_room *pool)
 {
 	t_room	*tmp2;
 
-	while (x < g_ants)
+	while (x < vars->ants)
 	{
 		if (arr[x] != 0 && arr[x]->key != 2 && arr[x]->links[y] != 0
 			&& arr[x]->father == 0)
@@ -133,7 +134,7 @@ int			lem_valid(t_room **pool)
 
 	c = 0;
 	x = 0;
-	while (x < g_ants)
+	while (x < vars->ants)
 	{
 		if (pool[x] == 0)
 			x++;
@@ -167,7 +168,6 @@ void		path_saver(t_room *pool, t_room *path)
 	}
 	while (path->father && path->dist != 0)
 	{
-		printf("PATH: %s\n", path->name);
 		if (path->key == 1 || path->key == 2)
 			path->dist = 0;
 		else
@@ -266,4 +266,42 @@ t_room		**queue_make_cycle(t_room *crnt, t_room *pool, t_room **queue,
 	}
 	queue[y] = 0;
 	return (queue);
+}
+
+void			printroom(t_room *s)
+{
+	int			x;
+
+	while (s != 0)
+	{
+		x = 0;
+		printf("  ROOM_NAME: %s\n", s->name);
+		printf("ROOM_COORDS: %d %d\n", s->x, s->y);
+		if (s->links != 0)
+		{
+			printf(" ROOM_LINKS:");
+			while (s->links[x] != 0)
+			{
+				printf(" %s", s->links[x]);
+				x++;
+			}
+			printf("\n");
+		}
+		s = s->next;
+	}
+	printf("\n");
+}
+
+void			printmap(void)
+{
+	int			x;
+
+	x = 0;
+	printf("%d\n", vars->ants);
+	while (vars->lines && vars->lines[x] != 0)
+	{
+		printf("%s\n", vars->lines[x]);
+		x++;
+	}
+	printf("\n");
 }
