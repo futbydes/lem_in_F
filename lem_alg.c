@@ -296,12 +296,26 @@ void			printmap(void)
 {
 	int			x;
 
-	x = 0;
+	x = -1;
 	printf("%d\n", vars->ants);
-	while (vars->lines && vars->lines[x] != 0)
+	if (vars->colors == 0)
+		while (vars->lines && vars->lines[++x] != 0)
+			printf("%s\n", vars->lines[x]);
+	else
 	{
-		printf("%s\n", vars->lines[x]);
-		x++;
+		while (vars->lines && vars->lines[++x] != 0)
+		{
+			if (x == 0)
+				printf("%s\n", vars->lines[x]);
+			else if (ft_strncmp(vars->lines[x], "##", 2))
+				printf("%s\n", vars->lines[x]);
+			else if (ft_strncmp(vars->lines[x], "#", 1))
+				printf("%s\n", vars->lines[x]);
+			else if (ft_strchr(vars->lines[x], '-'))
+				printf("%s\n", vars->lines[x]);
+			else
+				printf("%s\n", vars->lines[x]);
+		}
 	}
 	printf("\n");
 }
