@@ -29,7 +29,9 @@ int			lem_alg(t_room *s)
 		if (path != 0)
 		{
 			err = 1;
+			vars->paths != 0 ? ft_printf("PATH AVAIL: ") : 0;
 			path_saver(s, path);
+			vars->paths != 0 ? ft_printf("\n") : 0;
 			path = path->father;
 		}
 	}
@@ -74,7 +76,7 @@ void		ants_go(t_room *pool, t_room **arr)
 	while (lem_valid(arr))
 	{
 		ants_go_step(0, 0, arr, pool);
-		printf("\n");
+		ft_printf("\n");
 	}
 }
 
@@ -93,7 +95,7 @@ void		ants_go_step(int x, int y, t_room **arr, t_room *pool)
 			if (tmp2->avail > 1)
 			{
 				arr[x] = tmp2;
-				printf("L%d-%s ", x + 1, arr[x]->name);
+				ft_printf("L%d-%s ", x + 1, arr[x]->name);
 				x++;
 			}
 			y++;
@@ -101,7 +103,7 @@ void		ants_go_step(int x, int y, t_room **arr, t_room *pool)
 		else if (arr[x] != 0 && arr[x]->father != 0)
 		{
 			arr[x] = arr[x]->father;
-			printf("L%d-%s ", x + 1, arr[x]->name);
+			ft_printf("L%d-%s ", x + 1, arr[x]->name);
 			if (arr[x]->key == 2)
 				arr[x] = 0;
 			x++;
@@ -112,20 +114,53 @@ void		ants_go_step(int x, int y, t_room **arr, t_room *pool)
 }
 
 /*
-void		ants_go_step_dstcmp()
+t_room		*ants_go_step_dstcmp(t_room **arr)
 {
+
 	tmp2 = pool;
 	while (ft_strcmp(arr[x]->links[y], tmp2->name))
 		tmp2 = tmp2->next;
 	if (tmp2->avail > 1)
 	{
 		arr[x] = tmp2;
-		printf("L%d-%s ", x + 1, arr[x]->name);
+		ft_printf("L%d-%s ", x + 1, arr[x]->name);
 		x++;
 	}
 	return (x);
 } 
-*/
+
+t_room			*step_dstcmp_min(char **links, t_room *pool, int x)
+{
+	int			min;
+	t_room		*arr;
+	t_room		*min_r;
+	int			y;
+	char		**new;
+
+	y = -1;
+	min = 10000;
+	while (links[++y] != 0)
+	{
+		if (links[y][0] != 'L')
+		{
+			arr = pool;
+			while (ft_strcmp(links[y], arr->name))
+				arr = arr->next;
+			if (arr->dist < min)
+			{
+				min = arr->dist;
+				min_r = arr;
+			}
+		}
+	}
+	new = ft_memalloc((y + 1) * 8);
+	y = -1;
+	while (ft_strcmp(links[y], min_r->name))
+		y++;
+	links[y][0] = 'L';
+	new = (distance_arr);
+	return (min_r);
+} */
 
 int			lem_valid(t_room **pool)
 {
@@ -168,6 +203,7 @@ void		path_saver(t_room *pool, t_room *path)
 	}
 	while (path->father && path->dist != 0)
 	{
+		vars->paths != 0 ? ft_printf("%s ", path->name) : 0;
 		if (path->key == 1 || path->key == 2)
 			path->dist = 0;
 		else
@@ -275,21 +311,23 @@ void			printroom(t_room *s)
 	while (s != 0)
 	{
 		x = 0;
-		printf("  ROOM_NAME: %s\n", s->name);
-		printf("ROOM_COORDS: %d %d\n", s->x, s->y);
+		ft_printf(L_GREEN "  ROOM_NAME: %s\n" RESET,
+			s->name);
+		ft_printf(DARKGREY "ROOM_COORDS: %d %d\n"
+			RESET, s->x, s->y);
 		if (s->links != 0)
 		{
-			printf(" ROOM_LINKS:");
+			ft_printf(" ROOM_LINKS:");
 			while (s->links[x] != 0)
 			{
-				printf(" %s", s->links[x]);
+				ft_printf(" %s", s->links[x]);
 				x++;
 			}
-			printf("\n");
+			ft_printf("\n");
 		}
 		s = s->next;
 	}
-	printf("\n");
+	ft_printf("\n");
 }
 
 void			printmap(void)
@@ -297,25 +335,24 @@ void			printmap(void)
 	int			x;
 
 	x = -1;
-	printf("%d\n", vars->ants);
 	if (vars->colors == 0)
+	{
+		ft_printf("%d\n", vars->ants);
 		while (vars->lines && vars->lines[++x] != 0)
-			printf("%s\n", vars->lines[x]);
+			ft_printf("%s\n", vars->lines[x]);
+	}
 	else
 	{
+		ft_printf(L_GREEN "%d\n" RESET, vars->ants);
 		while (vars->lines && vars->lines[++x] != 0)
 		{
-			if (x == 0)
-				printf("%s\n", vars->lines[x]);
-			else if (ft_strncmp(vars->lines[x], "##", 2))
-				printf("%s\n", vars->lines[x]);
-			else if (ft_strncmp(vars->lines[x], "#", 1))
-				printf("%s\n", vars->lines[x]);
-			else if (ft_strchr(vars->lines[x], '-'))
-				printf("%s\n", vars->lines[x]);
+			if (!ft_strncmp(vars->lines[x], "##", 2))
+				ft_printf(L_GREEN "%s\n" RESET, vars->lines[x]);
+			else if (!ft_strncmp(vars->lines[x], "#", 1))
+				ft_printf(DARKGREY "%s\n" RESET, vars->lines[x]);
 			else
-				printf("%s\n", vars->lines[x]);
+				ft_printf(CYAN "%s\n" RESET, vars->lines[x]);
 		}
 	}
-	printf("\n");
+	ft_printf("\n");
 }

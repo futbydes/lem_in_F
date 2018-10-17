@@ -16,6 +16,7 @@
 
 # include <stdlib.h>
 # include "libft/libft.h"
+# include "libft/ft_printf/ft_printf.h"
 
 typedef struct 		s_lst
 {
@@ -50,7 +51,6 @@ typedef struct		s_room
 }					t_room;
 
 int					get_next_line(const int fd, char **line);
-#include <stdio.h>
 t_room				*lem_parse(t_room *s);
 int 				lem_error(void);
 t_room				*lem_check_4(t_room *pool);
@@ -78,19 +78,9 @@ int 				ants_go_full(t_room *pool, t_room **arr, t_room *tmp2, int x, int y);
 void				lem_free(t_room *s);
 int 				room_cmp(char *s1, char *s2, char c);
 t_room				**queue_make_cycle(t_room *crnt, t_room *pool,
-		t_room **queue, int x);
-
-void		ants_go_step(int x, int y, t_room **arr, t_room *pool);
-void			lem_map_arr(char *line);
-
-
-
-
-
-
-
-
-
+					t_room **queue, int x);
+void				ants_go_step(int x, int y, t_room **arr, t_room *pool);
+void				lem_map_arr(char *line);
 void				printroom(t_room *s);
 void				printmap(void);
 

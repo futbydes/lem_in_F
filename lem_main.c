@@ -41,7 +41,7 @@ int				main(void)
 
 int				lem_error(void)
 {
-	printf("%s\n", "ERROR");
+	ft_printf("%s\n", "ERROR");
 	return (1);
 }
 
