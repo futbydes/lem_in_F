@@ -12,10 +12,9 @@
 
 #include "lem.h"
 
-//CORDS VALIDATION FOR THE SAME ?
 //CORDS START FROM 0
 
-extern t_var *vars;
+extern struct g_var *vars;
 
 int			lem_alg(t_room *s)
 {
@@ -50,7 +49,7 @@ void			ants_prepare(t_room *pool)
 	t_room		*arr[vars->ants + 1];
 
 	x = 0;
-	path = pool; 
+	path = pool;
 	while (path)
 	{
 		tmp = path->father;
@@ -68,7 +67,6 @@ void			ants_prepare(t_room *pool)
 	}
 	arr[x] = 0;
 	ants_go(pool, arr);
-
 }
 
 void		ants_go(t_room *pool, t_room **arr)
@@ -153,12 +151,12 @@ void		path_saver(t_room *pool, t_room *path)
 	t_room	*temp;
 
 	temp = path->father;
-	if ((path->key == 1 || path->key == 2
-		) && (temp->key == 1 || temp->key == 2))
+	if ((path->key == 1 || path->key == 2)
+		&& (temp->key == 1 || temp->key == 2))
 	{
 		path->avail = 3;
 		temp->avail = 3;
-			return ;
+		return ;
 	}
 	temp = pool;
 	while (temp)
