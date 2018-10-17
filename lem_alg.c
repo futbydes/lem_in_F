@@ -110,6 +110,7 @@ void		ants_go_step(int x, int y, t_room **arr, t_room *pool)
 			x++;
 	}
 }
+
 /*
 void		ants_go_step_dstcmp()
 {
@@ -123,7 +124,8 @@ void		ants_go_step_dstcmp()
 		x++;
 	}
 	return (x);
-} */
+} 
+*/
 
 int			lem_valid(t_room **pool)
 {

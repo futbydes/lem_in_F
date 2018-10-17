@@ -211,7 +211,7 @@ t_room			*room_link(char *line, t_room *s)
 	x = 0;
 	if (!room_link_validation(line, s->next))
 		return (0);
-	while (temp != 0 && s != 0)
+	while (temp != 0 && s->next != 0)
 	{
 		s = s->next;
 		temp = room_cmp(s->name, line, '-');
