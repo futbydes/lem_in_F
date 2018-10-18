@@ -1,3 +1,0 @@
-/Users/vludan/Desktop/lemin/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/vludan/Desktop/lemin/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/vludan/Desktop/lemin/cmake-build-debug/CMakeFiles/lemin.dir
