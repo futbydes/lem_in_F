@@ -12,9 +12,7 @@
 
 #include "lem.h"
 
-//CORDS START FROM 0
-
-extern struct g_var *vars;
+extern struct s_var *vars;
 
 int			lem_alg(t_room *s)
 {
@@ -82,22 +80,12 @@ void		ants_go(t_room *pool, t_room **arr)
 
 void		ants_go_step(int x, int y, t_room **arr, t_room *pool)
 {
-	t_room	*tmp2;
-
 	while (x < vars->ants)
 	{
 		if (arr[x] != 0 && arr[x]->key != 2 && arr[x]->links[y] != 0
 			&& arr[x]->father == 0)
 		{
-			tmp2 = pool;
-			while (ft_strcmp(arr[x]->links[y], tmp2->name))
-				tmp2 = tmp2->next;
-			if (tmp2->avail > 1)
-			{
-				arr[x] = tmp2;
-				ft_printf("L%d-%s ", x + 1, arr[x]->name);
-				x++;
-			}
+			x = ants_go_step_start(arr, pool, x, y);
 			y++;
 		}
 		else if (arr[x] != 0 && arr[x]->father != 0)
@@ -113,11 +101,8 @@ void		ants_go_step(int x, int y, t_room **arr, t_room *pool)
 	}
 }
 
-/*
-t_room		*ants_go_step_dstcmp(t_room **arr)
+int			ants_go_step_start(t_room **arr, t_room *tmp2, int x, int y)
 {
-
-	tmp2 = pool;
 	while (ft_strcmp(arr[x]->links[y], tmp2->name))
 		tmp2 = tmp2->next;
 	if (tmp2->avail > 1)
@@ -127,40 +112,7 @@ t_room		*ants_go_step_dstcmp(t_room **arr)
 		x++;
 	}
 	return (x);
-} 
-
-t_room			*step_dstcmp_min(char **links, t_room *pool, int x)
-{
-	int			min;
-	t_room		*arr;
-	t_room		*min_r;
-	int			y;
-	char		**new;
-
-	y = -1;
-	min = 10000;
-	while (links[++y] != 0)
-	{
-		if (links[y][0] != 'L')
-		{
-			arr = pool;
-			while (ft_strcmp(links[y], arr->name))
-				arr = arr->next;
-			if (arr->dist < min)
-			{
-				min = arr->dist;
-				min_r = arr;
-			}
-		}
-	}
-	new = ft_memalloc((y + 1) * 8);
-	y = -1;
-	while (ft_strcmp(links[y], min_r->name))
-		y++;
-	links[y][0] = 'L';
-	new = (distance_arr);
-	return (min_r);
-} */
+}
 
 int			lem_valid(t_room **pool)
 {

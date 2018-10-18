@@ -12,7 +12,7 @@
 
 #include "lem.h"
 
-struct g_var	*vars;
+struct s_var	*vars;
 
 int				main(void)
 {
