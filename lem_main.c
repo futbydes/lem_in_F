@@ -282,7 +282,7 @@ t_room			*room_link_add(char *line, t_room *s, int c)
 	if (s->links[x] != 0 || !ft_strcmp(ft_strchr(line, '-') + 1, s->name))
 		return (temp);
 	s->links[x] = ft_memalloc(ft_strnlen((line +
-		ft_strnlen(line, '-') + 1) + 1, ' '));
+		ft_strnlen(line, '-') + 1) + 1, ' ') + 2);
 	ft_strcpy(s->links[x], (line + ft_strnlen(line, '-') + 1));
 	s->links[x + 1] = 0;
 	return (temp);
