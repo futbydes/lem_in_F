@@ -87,5 +87,6 @@ void				printroom(t_room *s);
 void				printmap(void);
 int					ants_go_step_start(t_room **arr,
 					t_room *tmp2, int x, int y);
+void				lem_parse_ants(char *line);
 
 #endif
